@@ -1,17 +1,19 @@
-import type { RawItem } from '#types/item'
+import type { Item } from '#types/item'
 import type { StatusType } from '#types/status'
 
 export type RenderContext = {
   /** Items to render. */
-  items: RawItem[]
+  items: Item[]
   /** Indicates if the list is displayed in loop mode. */
   loop: boolean
   /** Item index. */
   index: number
   /** Indicates if the item is active. */
   isActive: boolean
-  /** Indicates if the item is the current working directory. */
-  isCwd: boolean
+  /** Indicates if the item is currently selected (in multiple selection mode). */
+  isSelected?: boolean
+  /** Indicates if multiple selection mode is enabled. */
+  multiple?: boolean
 }
 
 export interface PromptTheme {
@@ -34,15 +36,20 @@ export interface PromptTheme {
   }
   style: {
     /**
-     * Defines the style for disabled items.
-     * @default chalk.strikethrough.gray
-     */
-    disabled: (linePrefix: string, text: string) => string
-    /**
      * Defines the style for the active item.
      * @default chalk.cyan
      */
     active: (text: string) => string
+    /**
+     * Defines the style for selected items in multiple selection mode.
+     * @default chalk.green with tick symbol
+     */
+    selected: (text: string) => string
+    /**
+     * Defines the style for unselected items in multiple selection mode.
+     * @default spaces for alignment
+     */
+    unselected: (text: string) => string
     /**
      * Defines the style for the cancel text.
      * @default chalk.red
@@ -54,20 +61,15 @@ export interface PromptTheme {
      */
     emptyText: (text: string) => string
     /**
-     * Defines the style for items of type `'directory'`.
+     * Defines the style for groups
      * @default chalk.yellowBright
      */
-    directory: (text: string) => string
+    group: (text: string) => string
     /**
-     * Defines the style for items of type `'file'`.
+     * Defines the style for items
      * @default No style applied
      */
-    file: (text: string) => string
-    /**
-     * Defines the style for the current directory header.
-     * @default chalk.magentaBright
-     */
-    currentDir: (text: string) => string
+    item: (text: string) => string
     /**
      * Defines the style applied to the main message, defined in `config.message`.
      * @default chalk.bold
@@ -78,6 +80,11 @@ export interface PromptTheme {
      * @default chalk.italic.gray
      */
     help: (text: string) => string
+    /**
+     * Defines the style for the final answer when prompt is done.
+     * @default chalk.cyan
+     */
+    answer: (text: string) => string
   }
   hierarchySymbols: {
     /**
@@ -95,20 +102,20 @@ export interface PromptTheme {
     /**
      * The help message displayed at the top of the prompt.
      * @param allowCancel - Indicates if canceling is allowed.
+     * @param multiple - Indicates if multiple selection is enabled.
      */
-    top: (allowCancel: boolean) => string
+    top: (allowCancel: boolean, multiple?: boolean) => string
+
     /**
-     * The help message displayed for directories.
-     * @param isCwd - Indicates if the directory is the current directory.
+     * The help message displayed for items.
+     * @param multiple - Indicates if multiple selection is enabled.
      */
-    directory: (isCwd: boolean) => string
-    /** The help message displayed for files. */
-    file: string
+    item: (multiple?: boolean) => string
   }
   /**
    * Renders an item in the list.
    * @param item - The item to render.
    * @param context - Additional context about the item.
    */
-  renderItem: (item: RawItem, context: RenderContext) => string
+  renderItem: (item: Item, context: RenderContext) => string
 }

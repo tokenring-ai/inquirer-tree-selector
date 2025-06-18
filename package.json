@@ -1,7 +1,7 @@
 {
-  "name": "inquirer-file-selector",
+  "name": "inquirer-tree-selector",
   "author": "Brian Fernandez",
-  "description": "Inquirer file selector prompt.",
+  "description": "Inquirer tree selector prompt.",
   "version": "0.6.1",
   "license": "MIT",
   "type": "module",
@@ -58,11 +58,11 @@
   "packageManager": "pnpm@10.8.1+sha512.c50088ba998c67b8ca8c99df8a5e02fd2ae2e2b29aaf238feaa9e124248d3f48f9fb6db2424949ff901cffbb5e0f0cc1ad6aedb602cd29450751d11c35023677",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/br14n-sol/inquirer-file-selector.git"
+    "url": "git+https://github.com/br14n-sol/inquirer-tree-selector.git"
   },
   "bugs": {
-    "url": "https://github.com/br14n-sol/inquirer-file-selector/issues"
+    "url": "https://github.com/br14n-sol/inquirer-tree-selector/issues"
   },
-  "homepage": "https://github.com/br14n-sol/inquirer-file-selector#readme",
-  "keywords": ["inquirer", "file", "selector"]
+  "homepage": "https://github.com/br14n-sol/inquirer-tree-selector#readme",
+  "keywords": ["inquirer", "tree", "selector", "hierarchy", "navigation"]
 }

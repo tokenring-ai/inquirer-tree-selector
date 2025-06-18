@@ -1,16 +1,8 @@
 export type Item = {
+  /** Name to display in the list */
   name: string
-  path: string
-  /** Size in bytes. */
-  size: number
-  /** Creation timestamp (milliseconds since POSIX Epoch). */
-  createdMs: number
-  /** Last modification timestamp (milliseconds since POSIX Epoch). */
-  lastModifiedMs: number
-  isDirectory: boolean
-}
-
-export type RawItem = Item & {
-  displayName: string
-  isDisabled: boolean
+  /** Value to put in selection list - if not provided, the item is not selectable */
+  value?: string
+  /** Children of this item (if any) */
+  children?: Item[] | ((parent?: Item) => Promise<Item[]> | Item[])
 }

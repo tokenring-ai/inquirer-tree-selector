@@ -1,6 +1,6 @@
 import figures from '@inquirer/figures'
 import chalk from 'chalk'
-import type { RawItem } from '#types/item'
+import type { Item } from '#types/item'
 import type { StatusType } from '#types/status'
 import type { PromptTheme, RenderContext } from '#types/theme'
 
@@ -11,47 +11,57 @@ export const baseTheme: PromptTheme = {
     canceled: chalk.red(figures.cross)
   },
   style: {
-    disabled: (linePrefix: string, text: string) =>
-      chalk.gray(`${linePrefix} ${chalk.strikethrough(text)}`),
     active: (text: string) => chalk.cyan(text),
+    selected: (text: string) => chalk.green(`${text} ${figures.tick}`),
+    unselected: (text: string) => text,
     cancelText: (text: string) => chalk.red(text),
     emptyText: (text: string) => chalk.red(text),
-    directory: (text: string) => chalk.yellowBright(text),
-    file: (text: string) => text,
-    currentDir: (text: string) => chalk.magentaBright(text),
+    group: (text: string) => chalk.yellowBright(text),
+    item: (text: string) => text,
     message: (text: string, _status: StatusType) => chalk.bold(text),
-    help: (text: string) => chalk.italic.gray(text)
+    help: (text: string) => chalk.italic.gray(text),
+    answer: (text: string) => chalk.cyan(text)
   },
   hierarchySymbols: {
     branch: figures.lineUpDownRight + figures.line,
     leaf: figures.lineUpRight + figures.line
   },
   help: {
-    top: (allowCancel: boolean) =>
-      `(Press ${figures.arrowUp + figures.arrowDown} to navigate, <backspace> to go back${allowCancel ? ', <esc> to cancel' : ''})`,
-    directory: (isCwd: boolean) =>
-      `(Press ${!isCwd ? '<space> to open, ' : ''}<enter> to select)`,
-    file: '(Press <enter> to select)'
+    top: (allowCancel: boolean, multiple?: boolean) =>
+      `(Press ${figures.arrowUp + figures.arrowDown} to navigate, ${figures.arrowLeft + figures.arrowRight} to navigate tree${
+        multiple ? ', <space> to toggle selection' : ''
+      }, <enter> to ${multiple ? 'confirm' : 'select'}${allowCancel ? ', <esc> or q to cancel' : ''})`,
+    item: multiple =>
+      multiple
+        ? '(Press <space> to toggle selection)'
+        : '(Press <enter> to select)'
   },
-  renderItem(item: RawItem, context: RenderContext) {
+  renderItem(item: Item, context: RenderContext) {
     const isLast = context.index === context.items.length - 1
-    const linePrefix =
+    let line =
       isLast && !context.loop
         ? this.hierarchySymbols.leaf
         : this.hierarchySymbols.branch
 
-    if (item.isDisabled) {
-      return this.style.disabled(linePrefix, item.displayName)
+    if (context.isSelected) {
+      line += this.style.selected(item.name)
+    } else {
+      if (context.isActive) {
+        line += this.style.active(item.name)
+      } else if (context.isSelected) {
+        line += this.style.selected(item.name)
+      } else if (item.children) {
+        line += this.style.group(item.name)
+      } else if (isLast && !context.loop) {
+        line += this.style.unselected(item.name)
+      } else {
+        line += this.style.unselected(item.name)
+      }
+      line += '  '
     }
 
-    const baseColor = item.isDirectory ? this.style.directory : this.style.file
-    const color = context.isActive ? this.style.active : baseColor
-    let line = color(`${linePrefix} ${item.displayName}`)
-
     if (context.isActive) {
-      const helpMessage = item.isDirectory
-        ? this.help.directory(context.isCwd)
-        : this.help.file
+      const helpMessage = this.help.item(context.multiple)
       line += ` ${this.style.help(helpMessage)}`
     }
 

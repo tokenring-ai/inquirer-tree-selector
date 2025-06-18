@@ -1,174 +1,226 @@
-import path from 'node:path'
 import {
+  type Status,
   createPrompt,
   makeTheme,
+  useEffect,
   useKeypress,
-  useMemo,
   usePagination,
   usePrefix,
   useState
 } from '@inquirer/core'
-import { ANSI_HIDE_CURSOR, Status } from '#consts'
+import { ANSI_HIDE_CURSOR, Status as LocalStatus } from '#consts'
 import { baseTheme } from '#theme'
 import type { PromptConfig } from '#types/config'
-import type { Item, RawItem } from '#types/item'
+import type { Item } from '#types/item'
 import type { StatusType } from '#types/status'
 import type { PromptTheme, RenderContext } from '#types/theme'
 import {
-  createRawItem,
-  ensurePathSeparator,
-  readRawItems,
-  sortRawItems,
-  stripInternalProps
-} from '#utils/item'
-import {
-  isBackspaceKey,
   isDownKey,
   isEnterKey,
   isEscapeKey,
+  isLeftKey,
+  isPageDown,
+  isPageUp,
+  isRightKey,
   isSpaceKey,
   isUpKey
 } from '#utils/key'
 
-export function fileSelector(
-  config: PromptConfig & { allowCancel?: false }
-): Promise<Item>
+// Multiple selection enabled, cancellation disabled
+export function treeSelector(
+  config: PromptConfig & { multiple: true; allowCancel?: false }
+): Promise<string[]>
 
-export function fileSelector(
-  config: PromptConfig & { allowCancel: true }
-): Promise<Item | null>
+// Multiple selection enabled, cancellation enabled
+export function treeSelector(
+  config: PromptConfig & { multiple: true; allowCancel: true }
+): Promise<string[] | null>
 
-export function fileSelector(config: PromptConfig): Promise<Item | null> {
-  return createPrompt<Item | null, PromptConfig>((config, done) => {
-    const {
-      pageSize = 10,
-      loop = false,
-      filter = () => true,
-      showExcluded = false,
-      allowCancel = false,
-      cancelText = 'Canceled.',
-      emptyText = 'Directory is empty.'
-    } = config
+// Single selection, cancellation disabled (existing)
+export function treeSelector(
+  config: PromptConfig & { multiple?: false; allowCancel?: false }
+): Promise<string>
 
-    const [status, setStatus] = useState<StatusType>(Status.Idle)
-    const theme = makeTheme<PromptTheme>(baseTheme, config.theme)
-    const prefix = usePrefix({ status, theme })
+// Single selection, cancellation enabled (existing)
+export function treeSelector(
+  config: PromptConfig & { multiple?: false; allowCancel: true }
+): Promise<string | null>
 
-    const [currentDir, setCurrentDir] = useState(
-      path.resolve(process.cwd(), config.basePath || '.')
-    )
+// Main implementation signature
+export function treeSelector(
+  config: PromptConfig
+): Promise<string | string[] | null> {
+  return createPrompt<string | string[] | null, PromptConfig>(
+    (config, done) => {
+      const {
+        pageSize = 10,
+        loop = false,
+        allowCancel = false,
+        cancelText = 'Canceled.',
+        emptyText = 'No items available.',
+        multiple = false,
+        initialSelection,
+        tree
+      } = config
 
-    const items = useMemo(() => {
-      const rawItems = readRawItems(currentDir)
-        .map(rawItem => {
-          const strippedItem = stripInternalProps(rawItem)
-          return { ...rawItem, isDisabled: !filter(strippedItem) }
-        })
-        .filter(rawItem => showExcluded || !rawItem.isDisabled)
-      sortRawItems(rawItems)
+      const [status, setStatus] = useState<Status>(LocalStatus.Idle as Status)
+      const theme = makeTheme<PromptTheme>(baseTheme, config.theme)
+      const prefix = usePrefix({ status, theme })
+      const [selectedItems, setSelectedItems] = useState<string[]>(
+        Array.isArray(initialSelection)
+          ? initialSelection
+          : [initialSelection as string]
+      )
 
-      if (config.type !== 'file') {
-        const cwd = createRawItem(currentDir)
-        cwd.displayName = ensurePathSeparator('.')
+      const [itemStack, setItemStack] = useState<Item[]>([tree])
 
-        rawItems.unshift(cwd)
-      }
+      const currentItem = itemStack[itemStack.length - 1]
 
-      return rawItems
-    }, [currentDir])
+      const [children, setChildren] = useState<Item[] | undefined>()
 
-    const bounds = useMemo(() => {
-      const first = items.findIndex(rawItem => !rawItem.isDisabled)
-      const last = items.findLastIndex(rawItem => !rawItem.isDisabled)
-
-      if (first === -1) {
-        return { first: 0, last: 0 }
-      }
-
-      return { first, last }
-    }, [items])
-
-    const [active, setActive] = useState(bounds.first)
-    const activeItem = items[active]
-
-    useKeypress((key, rl) => {
-      if (isEnterKey(key)) {
-        if (
-          activeItem.isDisabled ||
-          (config.type === 'file' && activeItem.isDirectory) ||
-          (config.type === 'directory' && !activeItem.isDirectory)
-        ) {
-          return
+      useEffect(() => {
+        if (currentItem.children instanceof Function) {
+          setChildren(undefined)
+          Promise.resolve(currentItem.children()).then(children =>
+            setChildren(children ?? [])
+          )
+        } else {
+          process.nextTick(() =>
+            setChildren((currentItem.children as Item[]) ?? [])
+          )
         }
+      }, [currentItem, currentItem?.children])
 
-        const strippedItem = stripInternalProps(activeItem)
+      const [active, setActive] = useState(0)
 
-        setStatus(Status.Done)
-        done(strippedItem)
-      } else if (isSpaceKey(key) && activeItem.isDirectory) {
-        setCurrentDir(activeItem.path)
-        setActive(bounds.first)
-      } else if (isUpKey(key) || isDownKey(key)) {
-        rl.clearLine(0)
+      const activeItem = children != null ? children[active] : undefined
 
-        if (
-          loop ||
-          (isUpKey(key) && active !== bounds.first) ||
-          (isDownKey(key) && active !== bounds.last)
+      useKeypress((key, rl) => {
+        if (isEnterKey(key)) {
+          if (multiple) {
+            // In multiple mode, Enter completes the selection with all selected items
+            setStatus(LocalStatus.Done as Status)
+            done(selectedItems)
+          } else {
+            if (activeItem?.value == null) {
+              return
+            }
+
+            // In single mode, Enter selects the current item
+            setStatus(LocalStatus.Done as Status)
+            done(activeItem.value)
+          }
+        } else if (isSpaceKey(key)) {
+          // Space now handles selection (toggle in multiple mode, select in single mode)
+          if (activeItem?.value == null) {
+            return
+          }
+
+          if (multiple) {
+            const idx = selectedItems.indexOf(activeItem.value)
+            if (idx !== -1) {
+              setSelectedItems([
+                ...selectedItems.slice(0, idx),
+                ...selectedItems.slice(idx + 1)
+              ])
+            } else {
+              setSelectedItems([...selectedItems, activeItem.value])
+            }
+          } else {
+            // In single mode, space selects the item (same as Enter)
+            setStatus(LocalStatus.Done as Status)
+            done(activeItem.value)
+          }
+        } else if (isRightKey(key)) {
+          // Right arrow navigates into children - only if the item has children
+          if (activeItem?.children) {
+            setItemStack([...itemStack, activeItem])
+          }
+        } else if (isLeftKey(key) && itemStack.length > 1) {
+          setItemStack(itemStack.slice(0, -1))
+        } else if (isEscapeKey(key) && allowCancel) {
+          setStatus(LocalStatus.Canceled as Status)
+          done(null)
+        } else if (
+          isUpKey(key) ||
+          isDownKey(key) ||
+          isPageUp(key) ||
+          isPageDown(key)
         ) {
-          const offset = isUpKey(key) ? -1 : 1
-          let next = active
+          rl.clearLine(0)
 
-          do {
-            next = (next + offset + items.length) % items.length
-          } while (items[next].isDisabled)
+          let newOffset = isUpKey(key)
+            ? active - 1
+            : isDownKey(key)
+              ? active + 1
+              : isPageUp(key)
+                ? active - pageSize
+                : active + pageSize
 
-          setActive(next)
+          if (loop) {
+            newOffset = children?.length ?? 0 % newOffset
+          } else {
+            newOffset = Math.min(
+              Math.max(newOffset, 0),
+              (children?.length ?? 0) - 1
+            )
+          }
+
+          setActive(newOffset)
+        } else if (isEscapeKey(key) && allowCancel) {
+          setStatus(LocalStatus.Canceled as Status)
+          done(null)
         }
-      } else if (isBackspaceKey(key)) {
-        setCurrentDir(path.resolve(currentDir, '..'))
-        setActive(bounds.first)
-      } else if (isEscapeKey(key) && allowCancel) {
-        setStatus(Status.Canceled)
-        done(null)
+      })
+
+      const page = usePagination({
+        items: children ?? [],
+        active,
+        renderItem: ({ item, index, isActive }) => {
+          return theme.renderItem(item, {
+            items: children ?? [],
+            loop,
+            index,
+            isActive,
+            isSelected:
+              item.value != null && selectedItems.includes(item.value),
+            multiple
+          })
+        },
+        pageSize,
+        loop
+      })
+
+      const message = theme.style.message(config.message, status)
+
+      if (status === (LocalStatus.Canceled as Status)) {
+        return `${prefix} ${message} ${theme.style.cancelText(cancelText)}`
       }
-    })
 
-    const page = usePagination({
-      items,
-      active,
-      renderItem: ({ item, index, isActive }) => {
-        const isCwd = item.path === currentDir
-        return theme.renderItem(item, { items, loop, index, isActive, isCwd })
-      },
-      pageSize,
-      loop
-    })
+      if (activeItem && status === (LocalStatus.Done as Status)) {
+        if (multiple) {
+          // In multiple mode, show the count of selected items
+          const count = selectedItems.length
+          const itemText = count === 1 ? 'item' : 'items'
+          return `${prefix} ${message} ${theme.style.answer(`${count} ${itemText} selected`)}`
+        }
+        // In single mode, show the selected item name
+        return `${prefix} ${message} ${theme.style.answer(activeItem.name)}`
+      }
 
-    const message = theme.style.message(config.message, status)
+      const helpTop = theme.style.help(theme.help.top(allowCancel, multiple))
+      const content =
+        children == null
+          ? 'Loading...'
+          : !page.length
+            ? theme.style.emptyText(emptyText)
+            : page
 
-    if (status === Status.Canceled) {
-      return `${prefix} ${message} ${theme.style.cancelText(cancelText)}`
+      return `${prefix} ${message} ${helpTop}\n${content}${ANSI_HIDE_CURSOR}`
     }
-
-    if (status === Status.Done) {
-      return `${prefix} ${message} ${theme.style.answer(activeItem.path)}`
-    }
-
-    const helpTop = theme.style.help(theme.help.top(allowCancel))
-    const header = theme.style.currentDir(ensurePathSeparator(currentDir))
-
-    return `${prefix} ${message} ${helpTop}\n${header}\n${!page.length ? theme.style.emptyText(emptyText) : page}${ANSI_HIDE_CURSOR}`
-  })(config)
+  )(config)
 }
 
-export { Status }
+export { LocalStatus as Status }
 
-export type {
-  StatusType,
-  PromptConfig,
-  Item,
-  RawItem,
-  PromptTheme,
-  RenderContext
-}
+export type { StatusType, PromptConfig, Item, PromptTheme, RenderContext }

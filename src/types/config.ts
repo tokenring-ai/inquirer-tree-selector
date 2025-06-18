@@ -7,15 +7,10 @@ export interface PromptConfig {
   /** Main message displayed in the prompt. */
   message: string
   /**
-   * Initial directory.
-   * @default process.cwd()
+   * List of tree items or function to obtain them.
+   * Items are strings or objects with name, value, and children properties.
    */
-  basePath?: string
-  /**
-   * Allowed item type.
-   * If omitted, all items are valid.
-   */
-  type?: 'file' | 'directory'
+  tree: Item
   /**
    * Max items displayed at once.
    * @default 10
@@ -27,16 +22,6 @@ export interface PromptConfig {
    */
   loop?: boolean
   /**
-   * Filters items in the list.
-   * @param item - Item to evaluate.
-   */
-  filter?: (item: Readonly<Item>) => boolean
-  /**
-   * Indicates if items excluded by `filter` are visible.
-   * @default false
-   */
-  showExcluded?: boolean
-  /**
    * Indicates if canceling is allowed.
    * @default false
    */
@@ -47,10 +32,21 @@ export interface PromptConfig {
    */
   cancelText?: string
   /**
-   * Message when the directory is empty.
-   * @default 'Directory is empty.'
+   * Message when the current node has no children.
+   * @default 'No items available.'
    */
   emptyText?: string
+  /**
+   * Indicates if multiple items can be selected.
+   * @default false
+   */
+  multiple?: boolean
+  /**
+   * Initial selection for the prompt.
+   * For single selection mode: a single Item or value string
+   * For multiple selection mode: an array of Items or value strings
+   */
+  initialSelection?: string | string[]
   /** Theme applied to the file selector. */
   theme?: PartialDeep<Theme<PromptTheme>>
 }
