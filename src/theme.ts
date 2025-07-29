@@ -51,7 +51,15 @@ export const baseTheme: PromptTheme = {
       } else if (context.isSelected) {
         line += this.style.selected(item.name)
       } else if (item.children) {
-        line += this.style.group(item.name)
+        const hasEnabledItems = context.selectedItems.some(
+          selectedItem =>
+            item.value != null && selectedItem.startsWith(item.value)
+        )
+        if (hasEnabledItems) {
+          line += this.style.selected(item.name)
+        } else {
+          line += this.style.group(item.name)
+        }
       } else if (isLast && !context.loop) {
         line += this.style.unselected(item.name)
       } else {

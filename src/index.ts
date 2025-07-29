@@ -184,7 +184,8 @@ export function treeSelector(
             isActive,
             isSelected:
               item.value != null && selectedItems.includes(item.value),
-            multiple
+            multiple,
+            selectedItems
           })
         },
         pageSize,

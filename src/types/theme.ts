@@ -14,6 +14,8 @@ export type RenderContext = {
   isSelected?: boolean
   /** Indicates if multiple selection mode is enabled. */
   multiple?: boolean
+  /** The currently selected items. */
+  selectedItems: string[]
 }
 
 export interface PromptTheme {
