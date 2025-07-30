@@ -1,8 +1,8 @@
 {
-  "name": "inquirer-tree-selector",
+  "name": "@token-ring/inquirer-tree-selector",
   "author": "Brian Fernandez",
   "description": "Inquirer tree selector prompt.",
-  "version": "0.6.1",
+  "version": "2.0.0",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
