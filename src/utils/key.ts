@@ -1,5 +1,5 @@
-import { isDownKey, isEnterKey, isSpaceKey, isUpKey } from '@inquirer/core'
 import type { KeypressEvent } from '@inquirer/core'
+import { isDownKey, isEnterKey, isSpaceKey, isUpKey } from '@inquirer/core'
 
 /** Check if the given key is the Escape key. */
 export function isEscapeKey(key: KeypressEvent): boolean {
