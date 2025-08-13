@@ -8,6 +8,15 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": ["./dist"],
+  "imports": {
+    "#consts": "./src/consts.ts",
+    "#theme": "./src/theme.ts",
+    "#types/config": "./src/types/config.ts",
+    "#types/item": "./src/types/item.ts",
+    "#types/status": "./src/types/status.ts",
+    "#types/theme": "./src/types/theme.ts",
+    "#utils/key": "./src/utils/key.ts"
+  },
   "scripts": {
     "prepare": "husky",
     "lint": "biome lint",
