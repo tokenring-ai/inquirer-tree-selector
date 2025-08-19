@@ -1,6 +1,6 @@
 {
-  "root": false,
-  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "root": true,
+  "$schema": "https://biomejs.dev/schemas/2.2.0/schema.json",
   "formatter": {
     "indentStyle": "space"
   },

@@ -147,6 +147,7 @@ interface PromptConfig {
     tree: Item;
     /**
      * Max items displayed at once.
+     * @default 10
      */
     pageSize?: number;
     /**
