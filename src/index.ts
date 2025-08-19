@@ -1,7 +1,7 @@
 import {
-  type Status,
   createPrompt,
   makeTheme,
+  type Status,
   useEffect,
   useKeypress,
   usePagination,
@@ -167,9 +167,6 @@ export function treeSelector(
           }
 
           setActive(newOffset)
-        } else if (isEscapeKey(key) && allowCancel) {
-          setStatus(LocalStatus.Canceled as Status)
-          done(null)
         }
       })
 

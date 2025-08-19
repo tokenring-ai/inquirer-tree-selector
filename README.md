@@ -6,7 +6,8 @@
 ![unpacked-size](https://img.shields.io/npm/unpacked-size/inquirer-tree-selector)
 ![downloads](https://img.shields.io/npm/dt/inquirer-tree-selector)
 
-A prompt implementation for [Inquirer.js](https://github.com/SBoudrias/Inquirer.js) that allows users to interactively select items from a tree structure in the terminal.
+A prompt implementation for [Inquirer.js](https://github.com/SBoudrias/Inquirer.js) that allows users to interactively
+select items from a tree structure in the terminal.
 
 ![banner](docs/banner.png)
 

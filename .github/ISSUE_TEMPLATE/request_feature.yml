@@ -1,6 +1,6 @@
 name: ⭐ Feature request
 description: Suggest a feature to improve the package
-labels: ["enhancement"]
+labels: [ "enhancement" ]
 
 body:
   - type: textarea

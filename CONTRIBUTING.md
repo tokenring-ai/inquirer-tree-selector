@@ -1,16 +1,18 @@
 # How to Contribute
 
-I'm really glad you're reading this! If you're interested in contributing to `inquirer-file-selector`, this guide will help you set up your environment.
+I'm really glad you're reading this! If you're interested in contributing to `inquirer-file-selector`, this guide will
+help you set up your environment.
 
 ## Prerequisites
 
 - **Node.js 20.19.0** (Ensure it's installed: `node -v`)
-  - Using a version manager like [fnm](https://github.com/Schniz/fnm) is recommended to easily switch between Node.js versions.
+- Using a version manager like [fnm](https://github.com/Schniz/fnm) is recommended to easily switch between Node.js
+  versions.
 - **pnpm 10.8.1** (Used for managing dependencies)
-   - It's recommended to enable [pnpm](https://pnpm.io/) via [corepack](https://github.com/nodejs/corepack):
-     ```sh
-     corepack enable pnpm
-     ```
+- It's recommended to enable [pnpm](https://pnpm.io/) via [corepack](https://github.com/nodejs/corepack):
+  ```sh
+  corepack enable pnpm
+  ```
 - **Git** (Required for cloning and contributing)
 - A GitHub account to fork and submit pull requests
 
@@ -41,7 +43,8 @@ This project uses the following tools to maintain code quality and consistency:
 
 ## Submitting Changes
 
-1. **Commit your changes** with clear and concise messages following [Conventional Commits](https://www.conventionalcommits.org/):
+1. **Commit your changes** with clear and concise messages
+   following [Conventional Commits](https://www.conventionalcommits.org/):
    ```sh
    git commit -m "feat(<scope>): add support for XYZ"
    ```

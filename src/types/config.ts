@@ -1,7 +1,7 @@
-import type { Theme } from '@inquirer/core'
-import type { PartialDeep } from '@inquirer/type'
-import type { Item } from '#types/item'
-import type { PromptTheme } from '#types/theme'
+import type {Item} from '#types/item'
+import type {PromptTheme} from '#types/theme'
+import type {Theme} from '@inquirer/core'
+import type {PartialDeep} from '@inquirer/type'
 
 export interface PromptConfig {
   /** Main message displayed in the prompt. */

@@ -1,5 +1,5 @@
-import type { Item } from '#types/item'
-import type { StatusType } from '#types/status'
+import type {Item} from '#types/item'
+import type {StatusType} from '#types/status'
 
 export type RenderContext = {
   /** Items to render. */

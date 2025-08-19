@@ -7,7 +7,9 @@
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": ["./dist"],
+  "files": [
+    "./dist"
+  ],
   "imports": {
     "#consts": "./src/consts.ts",
     "#theme": "./src/theme.ts",
@@ -29,26 +31,26 @@
     "*.{ts,json}": "biome check --write --no-errors-on-unmatched"
   },
   "dependencies": {
-    "@inquirer/core": "^10.1.9",
-    "@inquirer/figures": "^1.0.11",
-    "@inquirer/type": "^3.0.5",
-    "chalk": "^5.4.1"
+    "@inquirer/core": "^10.1.15",
+    "@inquirer/figures": "^1.0.13",
+    "@inquirer/type": "^3.0.8",
+    "chalk": "^5.5.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.9.4",
-    "@commitlint/cli": "19.8.0",
-    "@commitlint/config-conventional": "19.8.0",
+    "@biomejs/biome": "2.2.0",
+    "@commitlint/cli": "19.8.1",
+    "@commitlint/config-conventional": "19.8.1",
     "@rollup/plugin-terser": "0.4.4",
-    "@rollup/plugin-typescript": "12.1.2",
+    "@rollup/plugin-typescript": "12.1.4",
     "husky": "9.1.7",
     "nano-staged": "0.8.0",
     "rimraf": "6.0.1",
-    "rollup": "4.37.0",
-    "rollup-plugin-dts": "6.2.1",
-    "rollup-plugin-node-externals": "8.0.0",
+    "rollup": "4.46.2",
+    "rollup-plugin-dts": "6.2.3",
+    "rollup-plugin-node-externals": "8.0.1",
     "rollup-plugin-tsconfig-paths": "1.5.2",
     "tslib": "2.8.1",
-    "typescript": "5.6.3"
+    "typescript": "5.9.2"
   },
   "peerDependencies": {
     "@types/node": ">=20"
@@ -59,12 +61,14 @@
     }
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["@biomejs/biome"]
+    "onlyBuiltDependencies": [
+      "@biomejs/biome"
+    ]
   },
   "engines": {
     "node": ">=20"
   },
-  "packageManager": "pnpm@10.8.1+sha512.c50088ba998c67b8ca8c99df8a5e02fd2ae2e2b29aaf238feaa9e124248d3f48f9fb6db2424949ff901cffbb5e0f0cc1ad6aedb602cd29450751d11c35023677",
+  "packageManager": "pnpm@10.14.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/br14n-sol/inquirer-tree-selector.git"
@@ -73,5 +77,11 @@
     "url": "https://github.com/br14n-sol/inquirer-tree-selector/issues"
   },
   "homepage": "https://github.com/br14n-sol/inquirer-tree-selector#readme",
-  "keywords": ["inquirer", "tree", "selector", "hierarchy", "navigation"]
+  "keywords": [
+    "inquirer",
+    "tree",
+    "selector",
+    "hierarchy",
+    "navigation"
+  ]
 }

@@ -1,6 +1,6 @@
 name: 🐞 Issue report
 description: Report an issue
-labels: ["bug"]
+labels: [ "bug" ]
 
 body:
   - type: markdown
@@ -56,14 +56,14 @@ body:
         Example: "1.0.0"
     validations:
       required: true
-  
+
   - type: textarea
     id: other-details
     attributes:
       label: Other details
       placeholder: |
         Additional details and attachments.
-  
+
   - type: checkboxes
     id: acknowledgements
     attributes:
