@@ -67,9 +67,7 @@ export function treeSelector(
       const theme = makeTheme<PromptTheme>(baseTheme, config.theme)
       const prefix = usePrefix({ status, theme })
       const [selectedItems, setSelectedItems] = useState<string[]>(
-        Array.isArray(initialSelection)
-          ? initialSelection
-          : [initialSelection as string]
+        Array.isArray(initialSelection) ? initialSelection : [initialSelection]
       )
 
       const [itemStack, setItemStack] = useState<Item[]>([tree])
