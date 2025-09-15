@@ -28,22 +28,38 @@ import {
 
 // Multiple selection enabled, cancellation disabled
 export function treeSelector(
-  config: PromptConfig & { multiple: true; allowCancel?: false, initialSelection?: string[] }
+  config: PromptConfig & {
+    multiple: true
+    allowCancel?: false
+    initialSelection?: string[]
+  }
 ): Promise<string[]>
 
 // Multiple selection enabled, cancellation enabled
 export function treeSelector(
-  config: PromptConfig & { multiple: true; allowCancel: true, initialSelection?: string[] }
+  config: PromptConfig & {
+    multiple: true
+    allowCancel: true
+    initialSelection?: string[]
+  }
 ): Promise<string[] | null>
 
 // Single selection, cancellation disabled (existing)
 export function treeSelector(
-  config: PromptConfig & { multiple?: false; allowCancel?: false, initialSelection?: string }
+  config: PromptConfig & {
+    multiple?: false
+    allowCancel?: false
+    initialSelection?: string
+  }
 ): Promise<string>
 
 // Single selection, cancellation enabled (existing)
 export function treeSelector(
-  config: PromptConfig & { multiple?: false; allowCancel: true, initialSelection?: string }
+  config: PromptConfig & {
+    multiple?: false
+    allowCancel: true
+    initialSelection?: string
+  }
 ): Promise<string | null>
 
 // Main implementation signature
