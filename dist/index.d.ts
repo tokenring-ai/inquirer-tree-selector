@@ -188,18 +188,22 @@ interface PromptConfig {
 declare function treeSelector(config: PromptConfig & {
     multiple: true;
     allowCancel?: false;
+    initialSelection?: string[];
 }): Promise<string[]>;
 declare function treeSelector(config: PromptConfig & {
     multiple: true;
     allowCancel: true;
+    initialSelection?: string[];
 }): Promise<string[] | null>;
 declare function treeSelector(config: PromptConfig & {
     multiple?: false;
     allowCancel?: false;
+    initialSelection?: string;
 }): Promise<string>;
 declare function treeSelector(config: PromptConfig & {
     multiple?: false;
     allowCancel: true;
+    initialSelection?: string;
 }): Promise<string | null>;
 
 export { Status, treeSelector };

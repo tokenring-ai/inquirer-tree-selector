@@ -28,22 +28,22 @@ import {
 
 // Multiple selection enabled, cancellation disabled
 export function treeSelector(
-  config: PromptConfig & { multiple: true; allowCancel?: false }
+  config: PromptConfig & { multiple: true; allowCancel?: false, initialSelection?: string[] }
 ): Promise<string[]>
 
 // Multiple selection enabled, cancellation enabled
 export function treeSelector(
-  config: PromptConfig & { multiple: true; allowCancel: true }
+  config: PromptConfig & { multiple: true; allowCancel: true, initialSelection?: string[] }
 ): Promise<string[] | null>
 
 // Single selection, cancellation disabled (existing)
 export function treeSelector(
-  config: PromptConfig & { multiple?: false; allowCancel?: false }
+  config: PromptConfig & { multiple?: false; allowCancel?: false, initialSelection?: string }
 ): Promise<string>
 
 // Single selection, cancellation enabled (existing)
 export function treeSelector(
-  config: PromptConfig & { multiple?: false; allowCancel: true }
+  config: PromptConfig & { multiple?: false; allowCancel: true, initialSelection?: string }
 ): Promise<string | null>
 
 // Main implementation signature
@@ -59,7 +59,7 @@ export function treeSelector(
         cancelText = 'Canceled.',
         emptyText = 'No items available.',
         multiple = false,
-        initialSelection,
+        initialSelection = [],
         tree
       } = config
 
@@ -71,6 +71,7 @@ export function treeSelector(
       )
 
       const [itemStack, setItemStack] = useState<Item[]>([tree])
+      const [activeStack, setActiveStack] = useState<number[]>([0])
 
       const currentItem = itemStack[itemStack.length - 1]
 
@@ -101,6 +102,12 @@ export function treeSelector(
             done(selectedItems)
           } else {
             if (activeItem?.value == null) {
+              // If item has no value but has children, navigate into it
+              if (activeItem?.children) {
+                setItemStack([...itemStack, activeItem])
+                setActiveStack([...activeStack, 0])
+                setActive(0)
+              }
               return
             }
 
@@ -133,9 +140,14 @@ export function treeSelector(
           // Right arrow navigates into children - only if the item has children
           if (activeItem?.children) {
             setItemStack([...itemStack, activeItem])
+            setActiveStack([...activeStack, 0])
+            setActive(0)
           }
         } else if (isLeftKey(key) && itemStack.length > 1) {
+          const newActiveStack = activeStack.slice(0, -1)
           setItemStack(itemStack.slice(0, -1))
+          setActiveStack(newActiveStack)
+          setActive(newActiveStack[newActiveStack.length - 1])
         } else if (isEscapeKey(key) && allowCancel) {
           setStatus(LocalStatus.Canceled as Status)
           done(null)
@@ -165,6 +177,10 @@ export function treeSelector(
           }
 
           setActive(newOffset)
+          // Update the active position in the current level
+          const newActiveStack = [...activeStack]
+          newActiveStack[newActiveStack.length - 1] = newOffset
+          setActiveStack(newActiveStack)
         }
       })
 
