@@ -32,7 +32,8 @@ export function treeSelector(
     multiple: true
     allowCancel?: false
     initialSelection?: string[]
-  }
+  },
+  { signal }: { signal?: AbortSignal }
 ): Promise<string[]>
 
 // Multiple selection enabled, cancellation enabled
@@ -41,7 +42,8 @@ export function treeSelector(
     multiple: true
     allowCancel: true
     initialSelection?: string[]
-  }
+  },
+  { signal }: { signal?: AbortSignal }
 ): Promise<string[] | null>
 
 // Single selection, cancellation disabled (existing)
@@ -50,7 +52,8 @@ export function treeSelector(
     multiple?: false
     allowCancel?: false
     initialSelection?: string
-  }
+  },
+  { signal }: { signal?: AbortSignal }
 ): Promise<string>
 
 // Single selection, cancellation enabled (existing)
@@ -59,12 +62,14 @@ export function treeSelector(
     multiple?: false
     allowCancel: true
     initialSelection?: string
-  }
+  },
+  { signal }: { signal?: AbortSignal }
 ): Promise<string | null>
 
 // Main implementation signature
 export function treeSelector(
-  config: PromptConfig
+  config: PromptConfig,
+  { signal }: { signal?: AbortSignal } = {}
 ): Promise<string | string[] | null> {
   return createPrompt<string | string[] | null, PromptConfig>(
     (config, done) => {
@@ -245,7 +250,7 @@ export function treeSelector(
 
       return `${prefix} ${message} ${helpTop}\n${content}${ANSI_HIDE_CURSOR}`
     }
-  )(config)
+  )(config, { signal })
 }
 
 export { LocalStatus as Status }

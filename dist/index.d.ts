@@ -189,21 +189,29 @@ declare function treeSelector(config: PromptConfig & {
     multiple: true;
     allowCancel?: false;
     initialSelection?: string[];
+}, { signal }: {
+    signal?: AbortSignal;
 }): Promise<string[]>;
 declare function treeSelector(config: PromptConfig & {
     multiple: true;
     allowCancel: true;
     initialSelection?: string[];
+}, { signal }: {
+    signal?: AbortSignal;
 }): Promise<string[] | null>;
 declare function treeSelector(config: PromptConfig & {
     multiple?: false;
     allowCancel?: false;
     initialSelection?: string;
+}, { signal }: {
+    signal?: AbortSignal;
 }): Promise<string>;
 declare function treeSelector(config: PromptConfig & {
     multiple?: false;
     allowCancel: true;
     initialSelection?: string;
+}, { signal }: {
+    signal?: AbortSignal;
 }): Promise<string | null>;
 
 export { Status, treeSelector };
