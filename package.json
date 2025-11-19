@@ -1,87 +1,87 @@
 {
-  "name": "@tokenring-ai/inquirer-tree-selector",
-  "author": "Brian Fernandez",
-  "description": "Inquirer tree selector prompt.",
-  "version": "2.0.0",
-  "license": "MIT",
-  "type": "module",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "files": [
-    "./dist"
-  ],
-  "imports": {
-    "#consts": "./src/consts.ts",
-    "#theme": "./src/theme.ts",
-    "#types/config": "./src/types/config.ts",
-    "#types/item": "./src/types/item.ts",
-    "#types/status": "./src/types/status.ts",
-    "#types/theme": "./src/types/theme.ts",
-    "#utils/key": "./src/utils/key.ts"
-  },
-  "scripts": {
-    "prepare": "husky",
-    "lint": "biome lint",
-    "lint:fix": "biome check --write",
-    "clean": "rimraf dist",
-    "prebuild": "pnpm clean && pnpm lint",
-    "build": "rollup -c"
-  },
-  "nano-staged": {
-    "*.{ts,json}": "biome check --write --no-errors-on-unmatched"
-  },
-  "dependencies": {
-    "@inquirer/core": "^10.2.2",
-    "@inquirer/figures": "^1.0.13",
-    "@inquirer/type": "^3.0.8",
-    "chalk": "^5.6.2"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "2.2.4",
-    "@commitlint/cli": "20.0.0",
-    "@commitlint/config-conventional": "20.0.0",
-    "@rollup/plugin-terser": "0.4.4",
-    "@rollup/plugin-typescript": "12.1.4",
-    "husky": "9.1.7",
-    "nano-staged": "0.8.0",
-    "rimraf": "6.0.1",
-    "rollup": "4.52.3",
-    "rollup-plugin-dts": "6.2.3",
-    "rollup-plugin-node-externals": "8.1.1",
-    "rollup-plugin-tsconfig-paths": "1.5.2",
-    "tslib": "2.8.1",
-    "typescript": "5.9.2"
-  },
-  "peerDependencies": {
-    "@types/node": ">=20"
-  },
-  "peerDependenciesMeta": {
-    "@types/node": {
-      "optional": true
-    }
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@biomejs/biome"
-    ]
-  },
-  "engines": {
-    "node": ">=20"
-  },
-  "packageManager": "pnpm@10.17.1",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/br14n-sol/inquirer-tree-selector.git"
-  },
-  "bugs": {
-    "url": "https://github.com/br14n-sol/inquirer-tree-selector/issues"
-  },
-  "homepage": "https://github.com/br14n-sol/inquirer-tree-selector#readme",
-  "keywords": [
-    "inquirer",
-    "tree",
-    "selector",
-    "hierarchy",
-    "navigation"
-  ]
+	"name": "@tokenring-ai/inquirer-tree-selector",
+	"author": "Brian Fernandez",
+	"description": "Inquirer tree selector prompt.",
+	"version": "2.0.0",
+	"license": "MIT",
+	"type": "module",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"files": [
+		"./dist"
+	],
+	"imports": {
+		"#consts": "./src/consts.ts",
+		"#theme": "./src/theme.ts",
+		"#types/config": "./src/types/config.ts",
+		"#types/item": "./src/types/item.ts",
+		"#types/status": "./src/types/status.ts",
+		"#types/theme": "./src/types/theme.ts",
+		"#utils/key": "./src/utils/key.ts"
+	},
+	"scripts": {
+		"prepare": "husky",
+		"lint": "biome lint",
+		"lint:fix": "biome check --write",
+		"clean": "rimraf dist",
+		"prebuild": "pnpm clean && pnpm lint",
+		"build": "rollup -c"
+	},
+	"nano-staged": {
+		"*.{ts,json}": "biome check --write --no-errors-on-unmatched"
+	},
+	"dependencies": {
+		"@inquirer/core": "^11.0.1",
+		"@inquirer/figures": "^2.0.1",
+		"@inquirer/type": "^4.0.1",
+		"chalk": "^5.6.2"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.3.6",
+		"@commitlint/cli": "20.1.0",
+		"@commitlint/config-conventional": "20.0.0",
+		"@rollup/plugin-terser": "0.4.4",
+		"@rollup/plugin-typescript": "12.3.0",
+		"husky": "9.1.7",
+		"nano-staged": "0.9.0",
+		"rimraf": "6.1.1",
+		"rollup": "4.53.3",
+		"rollup-plugin-dts": "6.2.3",
+		"rollup-plugin-node-externals": "8.1.2",
+		"rollup-plugin-tsconfig-paths": "1.5.2",
+		"tslib": "2.8.1",
+		"typescript": "5.9.3"
+	},
+	"peerDependencies": {
+		"@types/node": ">=20"
+	},
+	"peerDependenciesMeta": {
+		"@types/node": {
+			"optional": true
+		}
+	},
+	"pnpm": {
+		"onlyBuiltDependencies": [
+			"@biomejs/biome"
+		]
+	},
+	"engines": {
+		"node": ">=20"
+	},
+	"packageManager": "pnpm@10.22.0",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/br14n-sol/inquirer-tree-selector.git"
+	},
+	"bugs": {
+		"url": "https://github.com/br14n-sol/inquirer-tree-selector/issues"
+	},
+	"homepage": "https://github.com/br14n-sol/inquirer-tree-selector#readme",
+	"keywords": [
+		"inquirer",
+		"tree",
+		"selector",
+		"hierarchy",
+		"navigation"
+	]
 }

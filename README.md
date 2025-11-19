@@ -2,11 +2,17 @@
 
 ## Overview
 
-The `@tokenring-ai/inquirer-tree-selector` package provides a tree selector prompt for [Inquirer.js](https://www.npmjs.com/package/inquirer), enabling hierarchical navigation and selection of items in a CLI interface. It supports both single and multiple selections, lazy-loading of children, and customizable theming. Users can navigate the tree using arrow keys (up/down for items, left/right for parent/child), space to toggle/select, enter to confirm, and escape to cancel (if enabled).
+The `@tokenring-ai/inquirer-tree-selector` package provides a tree selector prompt
+for [Inquirer.js](https://www.npmjs.com/package/inquirer), enabling hierarchical navigation and selection of items in a
+CLI interface. It supports both single and multiple selections, lazy-loading of children, and customizable theming.
+Users can navigate the tree using arrow keys (up/down for items, left/right for parent/child), space to toggle/select,
+enter to confirm, and escape to cancel (if enabled).
 
-This prompt is ideal for scenarios like file system navigation, menu selections, or any nested data structure where users need to drill down into sub-options.
+This prompt is ideal for scenarios like file system navigation, menu selections, or any nested data structure where
+users need to drill down into sub-options.
 
-The package integrates seamlessly with Inquirer.js core, using its hooks for state management, keypress handling, and pagination.
+The package integrates seamlessly with Inquirer.js core, using its hooks for state management, keypress handling, and
+pagination.
 
 ## Installation/Setup
 
@@ -18,9 +24,11 @@ This package is part of a monorepo and uses pnpm as the package manager. To buil
 4. For development: Use `pnpm lint` for checks and `pnpm clean` to remove dist/.
 
 To use in another project:
+
 ```
 pnpm add @tokenring-ai/inquirer-tree-selector
 ```
+
 Peer dependency: `@types/node` >=20 (optional).
 
 ## Package Structure
@@ -52,36 +60,40 @@ Key entry point: `src/index.ts` exports `treeSelector` and re-exports types.
 
 ### treeSelector Function
 
-The primary export is `treeSelector`, a prompt creator using `@inquirer/core`. It handles state for navigation, selection, and rendering.
+The primary export is `treeSelector`, a prompt creator using `@inquirer/core`. It handles state for navigation,
+selection, and rendering.
 
-- **Description**: Renders a paginated list of tree items, manages stack-based navigation (pushing/popping nodes), loads children (sync or async), and processes selections.
+- **Description**: Renders a paginated list of tree items, manages stack-based navigation (pushing/popping nodes), loads
+  children (sync or async), and processes selections.
 - **Key Parameters** (via `PromptConfig`):
-  - `message: string` - Prompt message.
-  - `tree: Item` - Root tree node (Item or function returning Item[]).
-  - `pageSize?: number` (default: 10) - Items per page.
-  - `loop?: boolean` (default: false) - Wrap navigation around list ends.
-  - `allowCancel?: boolean` (default: false) - Enable Escape/Q to cancel.
-  - `cancelText?: string` (default: 'Canceled.') - Cancel message.
-  - `emptyText?: string` (default: 'No items available.') - No children message.
-  - `multiple?: boolean` (default: false) - Allow multiple selections (returns string[]).
-  - `initialSelection?: string | string[]` - Pre-select items by value.
-  - `theme?: PartialDeep<Theme<PromptTheme>>` - Custom theme.
+ - `message: string` - Prompt message.
+ - `tree: Item` - Root tree node (Item or function returning Item[]).
+ - `pageSize?: number` (default: 10) - Items per page.
+ - `loop?: boolean` (default: false) - Wrap navigation around list ends.
+ - `allowCancel?: boolean` (default: false) - Enable Escape/Q to cancel.
+ - `cancelText?: string` (default: 'Canceled.') - Cancel message.
+ - `emptyText?: string` (default: 'No items available.') - No children message.
+ - `multiple?: boolean` (default: false) - Allow multiple selections (returns string[]).
+ - `initialSelection?: string | string[]` - Pre-select items by value.
+ - `theme?: PartialDeep<Theme<PromptTheme>>` - Custom theme.
 - **Return Types**:
-  - Single mode: `Promise<string | null>`
-  - Multiple mode: `Promise<string[] | null>`
+ - Single mode: `Promise<string | null>`
+ - Multiple mode: `Promise<string[] | null>`
 - **Interactions**:
-  - Uses `@inquirer/core` hooks: `useState` for status/selections/stack/active index; `useKeypress` for input; `usePagination` for rendering; `useEffect` for loading children; `usePrefix` for status icons.
-  - Navigation: Up/Down/PageUp/PageDown change active index; Right enters child (if exists); Left goes to parent; Space toggles/selects; Enter confirms.
-  - Rendering: Calls `theme.renderItem` for each visible item, using hierarchy symbols (branch/leaf).
+ - Uses `@inquirer/core` hooks: `useState` for status/selections/stack/active index; `useKeypress` for input;
+   `usePagination` for rendering; `useEffect` for loading children; `usePrefix` for status icons.
+ - Navigation: Up/Down/PageUp/PageDown change active index; Right enters child (if exists); Left goes to parent; Space
+   toggles/selects; Enter confirms.
+ - Rendering: Calls `theme.renderItem` for each visible item, using hierarchy symbols (branch/leaf).
 
 ### Item Type
 
 Represents a tree node.
 
 - **Properties**:
-  - `name: string` - Display name.
-  - `value?: string` - Selectable value (if omitted, non-selectable).
-  - `children?: Item[] | ((parent?: Item) => Promise<Item[]> | Item[])` - Sub-items (sync array or async function).
+ - `name: string` - Display name.
+ - `value?: string` - Selectable value (if omitted, non-selectable).
+ - `children?: Item[] | ((parent?: Item) => Promise<Item[]> | Item[])` - Sub-items (sync array or async function).
 
 Nodes without `value` act as groups/folders.
 
@@ -90,12 +102,15 @@ Nodes without `value` act as groups/folders.
 Customizable rendering and styling.
 
 - **Properties**:
-  - `prefix`: Object with `idle`, `done`, `canceled` (e.g., '?' , '✔', '✖').
-  - `style`: Functions for `active`, `selected`, `unselected`, `cancelText`, `emptyText`, `group`, `item`, `message`, `help`, `answer` (using Chalk for colors).
-  - `hierarchySymbols`: `{ branch: string, leaf: string }` (e.g., '├─', '└─').
-  - `help`: Functions `top(allowCancel, multiple)` and `item(multiple)` for key hints.
-  - `renderItem(item: Item, context: RenderContext): string` - Builds line with symbols, styles, and help (active items only).
-- **Base Theme**: Defined in `theme.ts` using Chalk and `@inquirer/figures` for defaults (cyan active, green selected, etc.).
+ - `prefix`: Object with `idle`, `done`, `canceled` (e.g., '?' , '✔', '✖').
+ - `style`: Functions for `active`, `selected`, `unselected`, `cancelText`, `emptyText`, `group`, `item`, `message`,
+   `help`, `answer` (using Chalk for colors).
+ - `hierarchySymbols`: `{ branch: string, leaf: string }` (e.g., '├─', '└─').
+ - `help`: Functions `top(allowCancel, multiple)` and `item(multiple)` for key hints.
+ - `renderItem(item: Item, context: RenderContext): string` - Builds line with symbols, styles, and help (active items
+   only).
+- **Base Theme**: Defined in `theme.ts` using Chalk and `@inquirer/figures` for defaults (cyan active, green selected,
+  etc.).
 
 ### Key Utilities
 
@@ -184,7 +199,7 @@ const selected = await treeSelector({
 ## API Reference
 
 - `treeSelector(config: PromptConfig): Promise<string | string[] | null>`
-  - Overloads for single/multiple modes.
+ - Overloads for single/multiple modes.
 - `type Item = { name: string; value?: string; children?: Item[] | ((parent?: Item) => Promise<Item[]> | Item[]) }`
 - `interface PromptConfig { /* see types/config.ts */ }`
 - `interface PromptTheme { /* see types/theme.ts */ }`
@@ -201,7 +216,8 @@ const selected = await treeSelector({
 - **Linting**: Use Biome (`pnpm lint:fix`).
 - **Testing**: No tests in codebase; add via Vitest/Jest if contributing.
 - **Building**: `pnpm build` generates `dist/` with .js, .d.ts.
-- **Limitations**: Assumes text-based tree (no binary files); pagination for large lists; async children must resolve to arrays.
+- **Limitations**: Assumes text-based tree (no binary files); pagination for large lists; async children must resolve to
+  arrays.
 - **Repository**: Based on https://github.com/br14n-sol/inquirer-tree-selector.
 - Contributions: Follow conventional commits; use nano-staged for pre-commit hooks.
 

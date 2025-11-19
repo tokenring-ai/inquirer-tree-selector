@@ -1,62 +1,62 @@
 {
-  "root": false,
-  "$schema": "https://biomejs.dev/schemas/2.2.4/schema.json",
-  "formatter": {
-    "indentStyle": "space"
-  },
-  "javascript": {
-    "formatter": {
-      "quoteStyle": "single",
-      "trailingCommas": "none",
-      "semicolons": "asNeeded",
-      "arrowParentheses": "asNeeded",
-      "indentStyle": "space"
-    }
-  },
-  "json": {
-    "formatter": {
-      "indentStyle": "space"
-    }
-  },
-  "linter": {
-    "rules": {
-      "recommended": true,
-      "correctness": {
-        "noUnusedVariables": "warn",
-        "noUnusedImports": "warn"
-      },
-      "style": {
-        "useCollapsedElseIf": "error",
-        "useConsistentArrayType": "error",
-        "useForOf": "error",
-        "useShorthandAssign": "error",
-        "useNamingConvention": {
-          "level": "error",
-          "options": {
-            "conventions": [
-              {
-                "selector": {
-                  "kind": "objectLiteralProperty"
-                },
-                "formats": ["camelCase", "PascalCase"]
-              }
-            ]
-          }
-        }
-      },
-      "suspicious": {
-        "noEmptyBlockStatements": "warn",
-        "useAwait": "warn"
-      }
-    }
-  },
-  "vcs": {
-    "enabled": true,
-    "clientKind": "git",
-    "useIgnoreFile": true,
-    "defaultBranch": "main"
-  },
-  "files": {
-    "includes": ["src/*.js", "src/*.ts", "*.json"]
-  }
+	"root": false,
+	"$schema": "https://biomejs.dev/schemas/2.2.4/schema.json",
+	"formatter": {
+		"indentStyle": "space"
+	},
+	"javascript": {
+		"formatter": {
+			"quoteStyle": "single",
+			"trailingCommas": "none",
+			"semicolons": "asNeeded",
+			"arrowParentheses": "asNeeded",
+			"indentStyle": "space"
+		}
+	},
+	"json": {
+		"formatter": {
+			"indentStyle": "space"
+		}
+	},
+	"linter": {
+		"rules": {
+			"recommended": true,
+			"correctness": {
+				"noUnusedVariables": "warn",
+				"noUnusedImports": "warn"
+			},
+			"style": {
+				"useCollapsedElseIf": "error",
+				"useConsistentArrayType": "error",
+				"useForOf": "error",
+				"useShorthandAssign": "error",
+				"useNamingConvention": {
+					"level": "error",
+					"options": {
+						"conventions": [
+							{
+								"selector": {
+									"kind": "objectLiteralProperty"
+								},
+								"formats": ["camelCase", "PascalCase"]
+							}
+						]
+					}
+				}
+			},
+			"suspicious": {
+				"noEmptyBlockStatements": "warn",
+				"useAwait": "warn"
+			}
+		}
+	},
+	"vcs": {
+		"enabled": true,
+		"clientKind": "git",
+		"useIgnoreFile": true,
+		"defaultBranch": "main"
+	},
+	"files": {
+		"includes": ["src/*.js", "src/*.ts", "*.json"]
+	}
 }
